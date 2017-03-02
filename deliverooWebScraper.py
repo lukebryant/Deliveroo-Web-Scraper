@@ -24,10 +24,15 @@ def writeSnapShotToCSV(csvfile, restaurants):
 		timeAt = li.find("span", { "class" : "restaurant-index-page-tile--time-number" })
 		restaurantText = li.find("h3").text if li.find("h3") is not None else ""
 		timeRangeText = timeRange.text if timeRange is not None else " "
-		timeAtText 		= timeAt.text if timeAt is not None else " "
+		try:
+			stringInts = timeRangeText.split("-")
+			expectedTime = (int(stringInts[0].replace(" ", "")) + int(stringInts[1].replace(" ", "")))/2
+		except ValueError:
+			expectedTime = 99
+		timeAtText = timeAt.text if timeAt is not None else " "
 		times[0] = reqTime;
 		if restaurantText in restaurants:
-			times[restaurants[restaurantText] * 2 + 1] = timeRangeText;
+			times[restaurants[restaurantText] * 2 + 1] = expectedTime;
 			times[restaurants[restaurantText] * 2 + 2] = timeAtText;
 	try:
 		writer.writerow(times)
